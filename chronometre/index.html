@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronomètre et Marées</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        .timer {
+            text-align: center;
+            font-size: 2em;
+            margin: 20px 0;
+            color: #28a745;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .tides {
+            margin-top: 20px;
+        }
+        .tide {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tide:last-child {
+            border-bottom: none;
+        }
+        .tide-type {
+            font-weight: bold;
+        }
+        .tide-height {
+            color: #6c757d;
+        }
+        .tide-time {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chronomètre et Marées</h1>
+        <div class="timer" id="timer">00:00</div>
+        <div class="controls">
+            <button id="startStopBtn">Démarrer</button>
+        </div>
+        <div class="tides">
+            <h2>Prochaines Marées</h2>
+            <div class="tide">
+                <span class="tide-type">Marée haute</span>
+                <span class="tide-height">3.20 m</span>
+                <span class="tide-time">12:30</span>
+            </div>
+            <div class="tide">
+                <span class="tide-type">Marée basse</span>
+                <span class="tide-height">0.80 m</span>
+                <span class="tide-time">18:45</span>
+            </div>
+            <div class="tide">
+                <span class="tide-type">Marée haute</span>
+                <span class="tide-height">3.10 m</span>
+                <span class="tide-time">00:15</span>
+            </div>
+            <div class="tide">
+                <span class="tide-type">Marée basse</span>
+                <span class="tide-height">0.70 m</span>
+                <span class="tide-time">06:30</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timerElement = document.getElementById('timer');
+            const startStopBtn = document.getElementById('startStopBtn');
+            let startTime;
+            let elapsedTime = 0;
+            let timerInterval;
+
+            // Mettre à jour le chronomètre
+            function updateTimer() {
+                const currentTime = Date.now();
+                elapsedTime = currentTime - startTime;
+                const seconds = Math.floor((elapsedTime / 1000) % 60);
+                const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            // Démarrer ou arrêter le chronomètre
+            function toggleTimer() {
+                if (startStopBtn.textContent === 'Démarrer') {
+                    startTime = Date.now() - elapsedTime;
+                    timerInterval = setInterval(updateTimer, 1000);
+                    startStopBtn.textContent = 'Arrêter';
+                } else {
+                    clearInterval(timerInterval);
+                    startStopBtn.textContent = 'Démarrer';
+                }
+            }
+
+            startStopBtn.addEventListener('click', toggleTimer);
+        });
+    </script>
+</body>
+</html>
