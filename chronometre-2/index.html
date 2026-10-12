@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronomètre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .chronometer-container {
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .time-display {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .start-stop-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .start-stop-button:hover {
+            background-color: #45a049;
+        }
+        .stop-button {
+            background-color: #f44336;
+        }
+        .stop-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="chronometer-container">
+        <div class="time-display" id="time-display">00:00</div>
+        <button class="start-stop-button" id="start-stop-button">Démarrer</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const timeDisplay = document.getElementById('time-display');
+            const startStopButton = document.getElementById('start-stop-button');
+
+            let startTime;
+            let elapsedTime = 0;
+            let timerInterval;
+
+            function updateTimeDisplay() {
+                const totalSeconds = Math.floor(elapsedTime / 1000);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+
+                const formattedMinutes = minutes.toString().padStart(2, '0');
+                const formattedSeconds = seconds.toString().padStart(2, '0');
+
+                timeDisplay.textContent = `${formattedMinutes}:${formattedSeconds}`;
+            }
+
+            function startTimer() {
+                startTime = Date.now() - elapsedTime;
+                timerInterval = setInterval(function() {
+                    elapsedTime = Date.now() - startTime;
+                    updateTimeDisplay();
+                }, 1000);
+                startStopButton.textContent = 'Arrêter';
+                startStopButton.classList.add('stop-button');
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+                startStopButton.textContent = 'Démarrer';
+                startStopButton.classList.remove('stop-button');
+            }
+
+            startStopButton.addEventListener('click', function() {
+                if (startStopButton.textContent === 'Démarrer') {
+                    startTimer();
+                } else {
+                    stopTimer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
